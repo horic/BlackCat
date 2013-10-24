@@ -31,8 +31,11 @@ case class SearchResult(found: Boolean)
 
 object RandomWord {
 
+
   /**
+   *
    * @param length
+   * @param alphabet
    * @return
    */
   def generate(length: Int, alphabet: String = "ENISRATDHULCGMOBWFKZPVßJYXQ"): String = {
@@ -63,7 +66,7 @@ class WordSearchAgent extends Actor {
 
     case job: SearchAgentJob =>
 
-      sender ! SearchResult(Source.fromFile(job.wordFilePath).getLines.exists(_ equalsIgnoreCase job.searchTerm))
+      sender ! SearchResult(Source.fromFile(job.wordFilePath).getLines().exists(w => w.equalsIgnoreCase(job.searchTerm)))
 
     case _ =>
 
@@ -72,9 +75,7 @@ class WordSearchAgent extends Actor {
   }
 }
 
-/**
- *
- */
+
 class WordSearchMaster extends Actor {
 
   var jobCount = 0
@@ -92,7 +93,7 @@ class WordSearchMaster extends Actor {
       jobCount = files.length
 
       files.foreach { f =>
-        agentRouter ! SearchAgentJob(job.searchTerm, f.getAbsolutePath())
+        agentRouter ! SearchAgentJob(job.searchTerm, f.getAbsolutePath)
       }
 
     case result: SearchResult =>
