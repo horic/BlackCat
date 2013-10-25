@@ -11,7 +11,7 @@ import akka.actor.ActorSystem
 
 object BlackCat extends App {
 
-  findWords
+  findWords()
 
   def findWords(): Unit = {
 
@@ -32,12 +32,7 @@ case class SearchResult(found: Boolean)
 object RandomWord {
 
 
-  /**
-   *
-   * @param length
-   * @param alphabet
-   * @return
-   */
+
   def generate(length: Int, alphabet: String = "ENISRATDHULCGMOBWFKZPVßJYXQ"): String = {
 
     if (length < 0) {
@@ -58,7 +53,7 @@ object RandomWord {
  */
 class WordSearchAgent extends Actor {
 
-  override def preStart = {
+  override def preStart() = {
     println("Starting actor " + self)
   }
 
@@ -66,7 +61,7 @@ class WordSearchAgent extends Actor {
 
     case job: SearchAgentJob =>
 
-      sender ! SearchResult(Source.fromFile(job.wordFilePath).getLines().exists(w => w.equalsIgnoreCase(job.searchTerm)))
+      sender ! SearchResult(Source.fromFile(job.wordFilePath).getLines().exists { w => w.equalsIgnoreCase(job.searchTerm) })
 
     case _ =>
 
