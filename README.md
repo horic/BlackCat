@@ -1,4 +1,4 @@
 BlackCat
 ========
 
-Akka word search machine test
+Akka word search machine 
